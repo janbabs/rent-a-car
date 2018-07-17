@@ -38,8 +38,8 @@ public class CustomerService {
             currentCustomer.setFirst_name(customer.getFirst_name());
         if(customer.getLast_name() != null)
             currentCustomer.setLast_name(customer.getLast_name());
-        if(customer.getPhonenumber() != null)
-            currentCustomer.setPhonenumber(customer.getPhonenumber());
+        if(customer.getPhoneNumber() != null)
+            currentCustomer.setPhoneNumber(customer.getPhoneNumber());
         customerRepository.save(currentCustomer);
     }
 }

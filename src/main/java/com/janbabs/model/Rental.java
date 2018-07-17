@@ -22,7 +22,6 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonIgnore
-
     private Customer customer;
 
     public Date getCreatDate() {

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.OptionalDouble;
 
 /**
  * Created by Jasiek on 21/05/2017.
@@ -29,8 +28,8 @@ public class CarService {
         carRepository.deleteAll();
     }
     public void saveCar(Car car) {;
-        if(car.getPrice() < 0.0)
-            car.setPrice(100.0);
+        if(car.getPriceForDay() < 0.0)
+            car.setPriceForDay(100.0);
         if(car.getProductionyear() < 2000)
            car.setProductionyear(2010);
         if(car.getMileage() < 0.0) {
@@ -41,16 +40,16 @@ public class CarService {
     }
     public void putCar(Car car, Long id) {
         Car currentCar = carRepository.findOne(id);
-        if(car.getPrice() >= 0.0)
-            currentCar.setPrice(car.getPrice());
+        if(car.getPriceForDay() >= 0.0)
+            currentCar.setPriceForDay(car.getPriceForDay());
         if(car.getProductionyear() >= 2000)
             currentCar.setProductionyear(car.getProductionyear());
         if(car.getModel() != null)
             currentCar.setModel(car.getModel());
         if(car.getMileage() >= 0.0)
             currentCar.setMileage(car.getMileage());
-        if(car.getCompany() != null)
-            currentCar.setCompany(car.getCompany());
+        if(car.getManufacturer() != null)
+            currentCar.setManufacturer(car.getManufacturer());
         if(!car.isEnabled())
             currentCar.setEnabled(car.isEnabled());
         carRepository.save(currentCar);
