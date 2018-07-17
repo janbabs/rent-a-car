@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -21,9 +23,9 @@ public class Car {
     private String model;
     private int productionYear;
     private double mileage;
-    private double priceForDay;
+    private BigDecimal priceForDay;
 
-    public Car(String manufacturer, String model, int productionYear, double mileage, double priceForDay) {
+    public Car(String manufacturer, String model, int productionYear, double mileage, BigDecimal priceForDay) {
         this.manufacturer = manufacturer;
         this.model = model;
         this.productionYear = productionYear;
