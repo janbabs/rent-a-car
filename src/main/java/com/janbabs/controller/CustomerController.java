@@ -2,38 +2,32 @@ package com.janbabs.controller;
 
 import com.janbabs.model.Customer;
 import com.janbabs.service.CustomerService;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @RestController
+@RequestMapping("/api/customer")
 public class CustomerController {
     private final CustomerService customerService;
 
-    @GetMapping("/customer")
-    public List<Customer>  getAllCustomers() {
-        return customerService.getAllCustomers();
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    @GetMapping("/customer/{id}")
-    public  Customer getCustomer(@PathVariable Long id) {
-        return customerService.getCustomerById(id);
+    @RequestMapping(method = POST, path = "/add")
+    public Long addCustomer(@RequestBody Customer customerToSave) {
+        return this.customerService.saveCustomer(customerToSave);
     }
 
-    @PostMapping("/customer")
-    public void saveCustomer(@RequestBody Customer customer) {
-        customerService.saveCustomer(customer);
+    @RequestMapping(method = GET, path = "/{customerId}")
+    public Customer getCustomerById(@PathVariable("customerId") Long customerId) {
+        return this.customerService.getCustomerById(customerId);
     }
-
-    @DeleteMapping("/customer/{id}")
-    public void deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomerById(id);
-    }
-
-    @PutMapping("/customer/{id}")
-    public void putCustomer(@PathVariable Long id,@RequestBody Customer customer) {
-        customerService.putCustomer(customer, id);
+    @RequestMapping(method = GET, path = "/all")
+    public List<Customer> getCustomerById() {
+        return this.customerService.getAllCustomers();
     }
 }
