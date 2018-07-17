@@ -1,19 +1,22 @@
 package com.janbabs.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@ToString
 @Entity
+@Getter
+@Setter
 public class Rental {
     @Id
     @GeneratedValue
     private Long id;
     @Temporal(TemporalType.DATE)
-    private Date creatDate = new Date();
+    private Date createDate = new Date();
     @Temporal(TemporalType.DATE)
     private Date endDate;
     @ManyToOne
@@ -24,35 +27,4 @@ public class Rental {
     @JsonIgnore
     private Customer customer;
 
-    public Date getCreatDate() {
-        return creatDate;
-    }
-
-    public void setCreatDate(Date creatDate) {
-        this.creatDate = creatDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
 }

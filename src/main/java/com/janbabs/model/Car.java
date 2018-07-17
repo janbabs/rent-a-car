@@ -22,9 +22,6 @@ public class Car {
     private int productionYear;
     private double mileage;
     private double priceForDay;
-    @OneToMany (cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "car")
-    @JsonIgnore
-    private List<Rental> rentalList;
 
     @Override
     public String toString() {
@@ -35,7 +32,6 @@ public class Car {
                 ", productionYear=" + productionYear +
                 ", mileage=" + mileage +
                 ", priceForDay=" + priceForDay +
-                ", rentalList=" + rentalList +
                 '}';
     }
 }

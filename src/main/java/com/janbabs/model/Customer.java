@@ -20,6 +20,7 @@ public class Customer {
     private Long id;
     private String first_name;
     private String last_name;
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     private String phoneNumber;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER, mappedBy = "customer")
