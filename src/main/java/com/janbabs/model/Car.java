@@ -1,13 +1,13 @@
 package com.janbabs.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Setter
@@ -15,13 +15,21 @@ import java.util.List;
 @NoArgsConstructor
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String manufacturer;
     private String model;
     private int productionYear;
     private double mileage;
     private double priceForDay;
+
+    public Car(String manufacturer, String model, int productionYear, double mileage, double priceForDay) {
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.productionYear = productionYear;
+        this.mileage = mileage;
+        this.priceForDay = priceForDay;
+    }
 
     @Override
     public String toString() {
