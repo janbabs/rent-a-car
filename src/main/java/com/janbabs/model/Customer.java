@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -22,5 +23,12 @@ public class Customer {
     private Address address;
     private String phoneNumber;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER, mappedBy = "customer")
-    private List<Rental> rentals;
+    private List<Rental> rentals = new ArrayList<>();
+
+    public Customer(String first_name, String last_name, Address address, String phoneNumber) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 }

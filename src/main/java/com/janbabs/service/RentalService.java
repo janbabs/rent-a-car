@@ -50,8 +50,8 @@ public class RentalService {
         if (currentRental==null) {
             System.out.println("User with id " + id + " not found");
         }
-        if(rental.getCreatDate() != null)
-            currentRental.setCreatDate(rental.getCreatDate());
+        if(rental.getCreateDate() != null)
+            currentRental.setCreateDate(rental.getCreateDate());
         if(rental.getEndDate() != null)
             currentRental.setEndDate(rental.getEndDate());
         rentalRepository.save(currentRental);
