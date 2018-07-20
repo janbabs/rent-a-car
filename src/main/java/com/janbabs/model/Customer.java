@@ -18,17 +18,17 @@ public class Customer {
     @Id
     @GeneratedValue
     private Long id;
-    private String first_name;
-    private String last_name;
-    @OneToOne(cascade = CascadeType.ALL)
+    private String firstName;
+    private String lastName;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
     private String phoneNumber;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER, mappedBy = "customer")
     private List<Rental> rentals = new ArrayList<>();
 
-    public Customer(String first_name, String last_name, Address address, String phoneNumber) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Customer(String firstName, String lastName, Address address, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }

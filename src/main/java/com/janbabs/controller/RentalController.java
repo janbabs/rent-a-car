@@ -1,40 +1,41 @@
 package com.janbabs.controller;
 
+import com.janbabs.dto.RentalDto;
 import com.janbabs.model.Rental;
 import com.janbabs.service.RentalService;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @RestController
+@RequestMapping("api/rentals")
 public class RentalController {
     private final RentalService rentalService;
 
-    @GetMapping("/rentals")
-        public List<Rental> getAllRental(){
+    public RentalController(RentalService rentalService) {
+        this.rentalService = rentalService;
+    }
+
+    @RequestMapping(method = GET, path = "/all")
+    public List<Rental> getAllRental(){
         return rentalService.getAllRental();
     }
 
-    @GetMapping("/rental/{id}")
+    @RequestMapping(method = GET, path = "/{id}")
     public Rental getRental(@PathVariable Long id) {
         return rentalService.getRentalById(id);
     }
 
-    @PostMapping("/customer/{customerId}/rental/{carId}")
-    public  void  saveRental(@RequestBody Rental rental, @PathVariable Long customerId, @PathVariable Long carId) {
-
-        rentalService.saveRental(rental, customerId, carId);
+    @RequestMapping(method = POST, path = "/add")
+    public Long makeRental(@RequestBody RentalDto rentalDto) {
+        return rentalService.makeRental(rentalDto);
     }
 
-    @DeleteMapping("/rental/{id}")
-    public void deleteRental(@PathVariable Long id) {
-        rentalService.deleteRentalById(id);
-    }
-
-    @PutMapping("/rental/{id}")
-    public void putRental(@RequestBody Rental rental,@PathVariable Long id) {
-        rentalService.putRental(rental, id);
+    @RequestMapping(method = GET, path = "/customer/{customerId}")
+    public List<Rental> getAllRentalsByCustomerId(@PathVariable("customerId") Long customerId) {
+        return rentalService.getAllByCustomerId(customerId);
     }
 }

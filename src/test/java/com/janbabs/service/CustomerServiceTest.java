@@ -1,86 +1,48 @@
 package com.janbabs.service;
 
-import com.janbabs.model.Address;
+import com.janbabs.dto.CustomerDto;
 import com.janbabs.model.Customer;
 import com.janbabs.repository.CustomerRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
     private CustomerService customerService;
-    private final String streetName = "Konstantynow";
-    private final String homeNumber = "4";
-    private final String zipCode = "20-882";
-    private final String city = "Warszawa";
-    private final Address address = new Address(streetName, homeNumber, zipCode, city);
-    private final String firstName = "Jan";
-    private final String lastName = "Kowalski";
-    private final String phoneNumber = "123456789";
-    private final String updated_FirstName = "Anna";
-    private final String updated_LastName = "Nowak";
+    private final String firstName = "John";
+    private final String lastName = "Smith";
+    private final String phoneNumber = "123 456 789";
+    private final String streetName = "Wiejska";
+    private final String homeNumber = "1";
+    private final String zipCode = "12-345";
+    private final String city = "Warsaw";
+    private final CustomerDto customerDto = new CustomerDto(firstName
+            , lastName, phoneNumber, streetName, homeNumber, zipCode, city);
 
+    @Mock
+    private CustomerRepository customerRepository;
 
+    @Mock
+    private CustomerFactory customerFactory;
 
-    @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @Mock
+    private Customer customer;
 
     @Before
-    public void setUp() throws Exception {
-        customerService = new CustomerService(customerRepository);
+    public void setUp() {
+        customerService = new CustomerService(customerRepository, customerFactory);
     }
 
     @Test
-    public void addCustomer() {
-        final Customer customer = new Customer(firstName, lastName, address, phoneNumber);
-        final Long idOfSavedCustomer = customerService.saveCustomer(customer);
-        ResponseEntity<String> response = this.restTemplate.getForEntity(
-                "/api/customer/{idOfSavedCustomer}", String.class, idOfSavedCustomer);
-
-        assertThat(response.getBody(), containsString(firstName));
-        assertThat(response.getBody(), containsString(lastName));
-        assertThat(response.getBody(), containsString(phoneNumber));
-        assertThat(response.getBody(), containsString(streetName));
-        assertThat(response.getBody(), containsString(homeNumber));
-        assertThat(response.getBody(), containsString(zipCode));
-        assertThat(response.getBody(), containsString(city));
+    public void shouldAddCustomer() {
+        when(customerFactory.create(customerDto)).thenReturn(customer);
+        customerService.saveCustomer(customerDto);
+        verify(customerRepository).save(customer);
     }
-
-    @Test
-    public void updateCustomer() {
-        final Customer customer = new Customer(firstName, lastName, address, phoneNumber);
-        final Long customerId = customerService.saveCustomer(customer);
-        final Customer updateCustomer = new Customer();
-
-        updateCustomer.setFirst_name(updated_FirstName);
-        updateCustomer.setLast_name(updated_LastName);
-
-        customerService.putCustomer(updateCustomer, customerId);
-
-        ResponseEntity<String> response = this.restTemplate.getForEntity(
-                "/api/customer/{customerId}", String.class, customerId);
-
-        assertThat(response.getBody(), containsString(updated_FirstName));
-        assertThat(response.getBody(), containsString(updated_LastName));
-        assertThat(response.getBody(), containsString(phoneNumber));
-        assertThat(response.getBody(), containsString(streetName));
-        assertThat(response.getBody(), containsString(homeNumber));
-        assertThat(response.getBody(), containsString(zipCode));
-        assertThat(response.getBody(), containsString(city));
-    }
-
 }

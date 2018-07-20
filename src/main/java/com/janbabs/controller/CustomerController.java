@@ -1,5 +1,6 @@
 package com.janbabs.controller;
 
+import com.janbabs.dto.CustomerDto;
 import com.janbabs.model.Customer;
 import com.janbabs.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +19,22 @@ public class CustomerController {
     }
 
     @RequestMapping(method = POST, path = "/add")
-    public Long addCustomer(@RequestBody Customer customerToSave) {
-        return this.customerService.saveCustomer(customerToSave);
+    public Long addCustomer(@RequestBody CustomerDto customerDto) {
+        return customerService.saveCustomer(customerDto);
     }
 
     @RequestMapping(method = GET, path = "/{customerId}")
     public Customer getCustomerById(@PathVariable("customerId") Long customerId) {
-        return this.customerService.getCustomerById(customerId);
+        return customerService.getCustomerById(customerId);
     }
+
     @RequestMapping(method = GET, path = "/all")
     public List<Customer> getCustomerById() {
-        return this.customerService.getAllCustomers();
+        return customerService.getAllCustomers();
+    }
+
+    @RequestMapping(method = PUT, path = "/{customerId}")
+    public Long updateCustomer(@RequestBody CustomerDto customerDto, @PathVariable("customerId") Long customerId) {
+        return customerService.putCustomer(customerDto, customerId);
     }
 }

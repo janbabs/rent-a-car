@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 public class Car {
     @Id
@@ -22,14 +22,13 @@ public class Car {
     private String manufacturer;
     private String model;
     private int productionYear;
-    private double mileage;
     private BigDecimal priceForDay;
+    private boolean isRented = false;
 
-    public Car(String manufacturer, String model, int productionYear, double mileage, BigDecimal priceForDay) {
+    public Car(String manufacturer, String model, int productionYear, BigDecimal priceForDay) {
         this.manufacturer = manufacturer;
         this.model = model;
         this.productionYear = productionYear;
-        this.mileage = mileage;
         this.priceForDay = priceForDay;
     }
 
@@ -40,8 +39,9 @@ public class Car {
                 ", manufacturer='" + manufacturer + '\'' +
                 ", model='" + model + '\'' +
                 ", productionYear=" + productionYear +
-                ", mileage=" + mileage +
                 ", priceForDay=" + priceForDay +
+                ", isRented=" + isRented +
                 '}';
     }
 }
+

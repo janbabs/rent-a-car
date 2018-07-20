@@ -1,19 +1,22 @@
 package com.janbabs.service;
 
+import com.janbabs.dto.CarDto;
 import com.janbabs.model.Car;
 import com.janbabs.repository.CarRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created by Jasiek on 21/05/2017.
- */
-@AllArgsConstructor
 @Service
 public class CarService {
     private final CarRepository carRepository;
+    private final CarFactory carFactory;
+
+    public CarService(CarRepository carRepository, CarFactory carFactory) {
+        this.carRepository = carRepository;
+        this.carFactory = carFactory;
+    }
 
     public List<Car> getAllCars() {
         return carRepository.findAll();
@@ -21,37 +24,39 @@ public class CarService {
     public Car getCarById(Long id) {
         return carRepository.findOne(id);
     }
-    public void deleteCarById(Long id) {
-        carRepository.delete(id);
-    }
-    public void deleteAllCars() {
-        carRepository.deleteAll();
-    }
-    public void saveCar(Car car) {;
-        if(car.getPriceForDay() < 0.0)
-            car.setPriceForDay(100.0);
-        if(car.getProductionyear() < 2000)
-           car.setProductionyear(2010);
-        if(car.getMileage() < 0.0) {
-            System.out.println(car.getMileage());
-            car.setMileage(0);
-        }
+    public Long saveCar(CarDto carDto) {
+        carDto.validate();
+        Car car = carFactory.create(carDto);
         carRepository.save(car);
+        return car.getId();
     }
-    public void putCar(Car car, Long id) {
+
+    public Long putCar(CarDto carDto, Long id) {
         Car currentCar = carRepository.findOne(id);
-        if(car.getPriceForDay() >= 0.0)
-            currentCar.setPriceForDay(car.getPriceForDay());
-        if(car.getProductionyear() >= 2000)
-            currentCar.setProductionyear(car.getProductionyear());
-        if(car.getModel() != null)
-            currentCar.setModel(car.getModel());
-        if(car.getMileage() >= 0.0)
-            currentCar.setMileage(car.getMileage());
-        if(car.getManufacturer() != null)
-            currentCar.setManufacturer(car.getManufacturer());
-        if(!car.isEnabled())
-            currentCar.setEnabled(car.isEnabled());
+        if (carDto.getPriceForDay() != null) {
+            if(carDto.isCarPricePositive()) {
+                final BigDecimal priceForDay = new BigDecimal(carDto.getPriceForDay());
+                currentCar.setPriceForDay(priceForDay);
+            }
+            else {
+                throw new IllegalArgumentException("Value priceForDay can't be negative!");
+            }
+        }
+        if (carDto.getProductionYear() != null) {
+            if(carDto.isCarProductionYearCorrect()) {
+                final int productionYear = Integer.valueOf(carDto.getProductionYear());
+                currentCar.setProductionYear(productionYear);
+            }
+            else {
+                throw new IllegalArgumentException("Value productionYear is incorrect!");
+            }
+        }
+        if(carDto.getModel() != null)
+            currentCar.setModel(carDto.getModel());
+        if(carDto.getManufacturer() != null)
+            currentCar.setManufacturer(carDto.getManufacturer());
+
         carRepository.save(currentCar);
+        return currentCar.getId();
     }
 }
