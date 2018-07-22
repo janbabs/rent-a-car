@@ -5,6 +5,7 @@ import com.janbabs.model.Address;
 import com.janbabs.model.Customer;
 import com.janbabs.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,19 +19,25 @@ public class CustomerService {
         this.customerFactory = customerFactory;
     }
 
+    @Transactional
     public List<Customer> getAllCustomers(){
         return customerRepository.findAll();
     }
+
+    @Transactional
     public Customer getCustomerById(Long id) {
         return customerRepository.findOne(id);
     }
 
+    @Transactional
     public Long saveCustomer(CustomerDto customerDto) {
         customerDto.validate();
         Customer customer = customerFactory.create(customerDto);
         customerRepository.save(customer);
         return customer.getId();
     }
+
+    @Transactional
     public Long putCustomer(CustomerDto customerDto, Long customerId) {
         final Customer currentCustomer = customerRepository.findOne(customerId);
 

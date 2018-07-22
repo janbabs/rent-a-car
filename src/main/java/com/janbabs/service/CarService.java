@@ -4,6 +4,7 @@ import com.janbabs.dto.CarDto;
 import com.janbabs.model.Car;
 import com.janbabs.repository.CarRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,12 +19,17 @@ public class CarService {
         this.carFactory = carFactory;
     }
 
+    @Transactional
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }
+    
+    @Transactional
     public Car getCarById(Long id) {
         return carRepository.findOne(id);
     }
+    
+    @Transactional
     public Long saveCar(CarDto carDto) {
         carDto.validate();
         Car car = carFactory.create(carDto);
@@ -31,6 +37,7 @@ public class CarService {
         return car.getId();
     }
 
+    @Transactional
     public Long putCar(CarDto carDto, Long id) {
         Car currentCar = carRepository.findOne(id);
         if (carDto.getPriceForDay() != null) {

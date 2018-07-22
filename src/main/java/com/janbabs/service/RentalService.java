@@ -6,6 +6,7 @@ import com.janbabs.model.Customer;
 import com.janbabs.model.Rental;
 import com.janbabs.repository.RentalRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,14 +25,17 @@ public class RentalService {
         this.rentalFactory = rentalFactory;
     }
 
+    @Transactional
     public List<Rental> getAllRental() {
         return rentalRepository.findAll();
     }
 
+    @Transactional
     public Rental getRentalById(Long id) {
         return rentalRepository.findOne(id);
     }
 
+    @Transactional
     public Long makeRental(RentalDto rentalDto) {
         rentalDto.validate();
         Car car = carService.getCarById(rentalDto.getCarId());
@@ -58,6 +62,7 @@ public class RentalService {
         return car.isRented();
     }
 
+    @Transactional
     public List<Rental> getAllByCustomerId(Long customerId) {
         return rentalRepository.findByCustomerId(customerId);
     }
